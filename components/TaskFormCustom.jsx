@@ -1,51 +1,52 @@
-"use client";
-import { createTaskCustom } from "@/utils/action";
-import { useEffect } from "react";
-import { useFormStatus, useFormState } from "react-dom";
-import toast from "react-hot-toast";
+'use client';
+import { createTaskCustom } from '@/utils/actions';
+import { useEffect } from 'react';
 
-const initialState = {
-  success: null,
-  message: null,
-};
+import { useFormStatus, useFormState } from 'react-dom';
+import toast from 'react-hot-toast';
 
-const Submit = () => {
+const SubmitBtn = () => {
   const { pending } = useFormStatus();
   return (
     <button
+      type='submit'
+      className='btn btn-primary join-item'
       disabled={pending}
-      className={`btn btn-primary uppercase join-item w-1/4`}
     >
-      {pending ? "Creating Task..." : "Create Task"}
+      {pending ? 'please wait...' : 'create task'}
     </button>
   );
 };
 
-const TaskFormCustom = () => {
+const initialState = {
+  message: null,
+};
+
+const TaskForm = () => {
   const [state, formAction] = useFormState(createTaskCustom, initialState);
   useEffect(() => {
-    if (state.success == false) {
-      toast.error(state.message);
-    } else if (state.success == true) {
-      toast.success(state.message);
+    if (state.message === 'error') {
+      toast.error('there was an error');
+      return;
     }
-    return;
+    if (state.message) {
+      toast.success('task created');
+    }
   }, [state]);
   return (
     <form action={formAction}>
-      {/* {state.message && <p className="mb-4">{state.message}</p>} */}
-      <div className="join w-full">
+      {/* {state.message ? <p className='mb-2'>{state.message}</p> : null} */}
+      <div className='join w-full'>
         <input
-          type="text"
-          className="input input-bordered join-item w-3/4"
-          placeholder="Type here..."
-          name="content"
+          type='text '
+          className='input input-bordered join-item w-full'
+          placeholder='type here'
+          name='content'
           required
         />
-        <Submit />
+        <SubmitBtn />
       </div>
     </form>
   );
 };
-
-export default TaskFormCustom;
+export default TaskForm;
