@@ -1,7 +1,7 @@
 "use server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import prisma from "./db";
+import prisma from "@/prisma";
 import { redirect } from "next/navigation";
 
 export const getAllTasks = async () => {
@@ -28,7 +28,7 @@ export const deleteTask = async (formData) => {
 };
 
 export const getTask = async (id) => {
-  return await prisma.task.findUnique({
+  return prisma.task.findUnique({
     where: { id },
   });
 };
