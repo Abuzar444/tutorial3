@@ -1,28 +1,37 @@
-import prisma from "@/utils/db";
-export const dynamic = "force-dynamic";
+import prisma from '@/utils/db';
 
-const prismaHandler = async () => {
-  const tasks = await prisma.task.findMany({
+const prismaHandlers = async () => {
+  console.log('prisma example');
+  // await prisma.task.create({
+  //   data: {
+  //     content: 'wake up',
+  //   },
+  // });
+  const allTasks = await prisma.task.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
   });
-  return tasks;
+  return allTasks;
 };
 
 const PrismaExample = async () => {
-  const tasks = await prismaHandler();
+  const tasks = await prismaHandlers();
+  if (tasks.length === 0) {
+    return <h2 className='mt-8 font-medium text-lg'>No tasks to show...</h2>;
+  }
+
   return (
     <div>
-      <h1 className="text-7xl">Tasks</h1>
-      {tasks &&
-        tasks.map((task) => (
-          <h2 key={task.id} className="text-xl py-2 mt-8">
-            {task.content} {task.completed ? "✅" : "❌"}
+      <h1 className='text-7xl'>PrismaExample</h1>
+      {tasks.map((task) => {
+        return (
+          <h2 key={task.id} className='text-xl py-2'>
+            😬 {task.content}
           </h2>
-        ))}
+        );
+      })}
     </div>
   );
 };
-
 export default PrismaExample;
